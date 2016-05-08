@@ -4,17 +4,19 @@ using System.Collections;
 
 //스크립트를 오브젝트에 더할 때 PlayerController 스크립트 또한 무조건 붙어있을걸 강요한다.
 [RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(GunController))]
 public class Player : MonoBehaviour {
 
     public float moveSpeed = 5;
     PlayerController controller;
+    GunController gunController;
     Camera viewCamera;
 
 	void Start () {
         //PlayerController와 Player 스크립트가 같은 오브젝트에 붙어있는걸 전제로 한다.
         controller = GetComponent<PlayerController>();
+        gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
-	    
 	}
 	
 	void Update () {
@@ -29,7 +31,7 @@ public class Player : MonoBehaviour {
         controller.Move(moveVelocity);
 
 
-        //************Player가 마우스 움직임에따라 회전하는부분 구현 ************
+        //************Player가 마우스 움직임에따라 회전하는부분 구현(바라보는 방향) ************
         //ScreenPointToRay : 화면상에서 위치를 반환해주는 메소드
         //마우스 위치를 넣었으므로  화면상에서 마우스의 위치를 가져온다.
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
@@ -49,7 +51,11 @@ public class Player : MonoBehaviour {
            
         }
 
-
+        //************ 무기 조작 입력 ************
+        if(Input.GetMouseButton(0)) //마우스 왼쪽버튼
+        {
+            gunController.Shoot();
+        }
 
 
     }
